@@ -1,5 +1,3 @@
-import 'dart:typed_data';
-import 'dart:math';
 import 'package:flutter/material.dart';
 import 'util/date_helper.dart';
 import 'package:flutter/services.dart';
@@ -105,8 +103,10 @@ List<bool> isAlertEffect = [];
 /// 背骨ダメージエフェクトの直筋の発火時間
 late int latestFireTime;
 
+/// アニメーションを発火させるインターバル
+final int animationInterval = 2;
 
-
+final SeboneData _seboneData = new SeboneData();
 
 
 class DataAcquirementPage extends StatefulWidget {
@@ -134,19 +134,31 @@ class _DataAcquirementPageState extends State<DataAcquirementPage> {
     super.dispose();
 
   }
-    toMove(imageNo);
+    messageType = 2;
     drawNeckLightningEffect(messageType);
     drawLightningEffect(1, angle[1]);
     drawLightningEffect(2, angle[2]);
-    drawDamageAlertEffect(_seboneData.damageRate, 0);
-    drawDamageAlertEffect(_seboneData.damageRate, 1);
-    drawDamageAlertEffect(_seboneData.damageRate, 2);
+    drawDamageAlertEffect(100, 0);
+    drawDamageAlertEffect(100, 1);
+    drawDamageAlertEffect(100, 2);
     
   }
 
   toMove(int index) {
     _normalMovementController.toMove(index);
   }
+// アラート文言：メッセージテキストゲッター
+  getMessageText() {
+    var message = "";
+    message = IllustrationKeys.message[messageType - 1];
+    return message;
+  }
+
+double getDamage(int ix) {
+    return partDamage[ix] / 1000;
+  }
+
+
 
   drawDamageAlertEffect(double damageRate, int index) {
     if (isAlertEffect[index] == false) {
